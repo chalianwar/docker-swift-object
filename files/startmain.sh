@@ -11,9 +11,6 @@ SWIFT_REPLICAS=${SWIFT_REPLICAS:-1}
 SWIFT_PWORKERS=${PROXY_WORKERS:-8}
 SWIFT_OWORKERS=${OBJECT_WORKERS:-8}
 
-sed -i "s/workers.*/workers = $SWIFT_PWORKERS/g" /etc/swift/proxy-server.conf
-sed -i "s/workers.*/workers = $SWIFT_OWORKERS/g" /etc/swift/object-server.conf
-
 if [ -e /srv/account.builder ]; then
 	echo "Ring files already exist in /srv, copying them to /etc/swift..."
 	cp /srv/*.builder /etc/swift/
@@ -68,6 +65,10 @@ if [ ! -z "${SWIFT_SET_PASSWORDS}" ]; then
 	sed -i -e "s/user_test_tester3 = testing3/user_test_tester3 = $PASS/g" /etc/swift/proxy-server.conf
 	grep "user_test" /etc/swift/proxy-server.conf
 fi
+
+# Set the number of proxy workers and object workers on fly
+sed -i "s/workers.*/workers = $SWIFT_PWORKERS/g" /etc/swift/proxy-server.conf
+sed -i "s/workers.*/workers = $SWIFT_OWORKERS/g" /etc/swift/object-server.conf
 
 # Start supervisord
 echo "Starting supervisord..."
