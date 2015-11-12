@@ -8,6 +8,11 @@
 SWIFT_PART_POWER=${SWIFT_PART_POWER:-7}
 SWIFT_PART_HOURS=${SWIFT_PART_HOURS:-1}
 SWIFT_REPLICAS=${SWIFT_REPLICAS:-1}
+SWIFT_PWORKERS=${PROXY_WORKERS:-8}
+SWIFT_OWORKERS=${OBJECT_WORKERS:-8}
+
+sed -i "s/workers.*/workers = $SWIFT_PWORKERS/g" /etc/swift/proxy-server.conf
+sed -i "s/workers.*/workers = $SWIFT_OWORKERS/g" /etc/swift/object-server.conf
 
 if [ -e /srv/account.builder ]; then
 	echo "Ring files already exist in /srv, copying them to /etc/swift..."
