@@ -28,6 +28,6 @@ ADD files/proxy-server.conf /etc/swift/proxy-server.conf
 ADD files/startmain.sh /usr/local/bin/startmain.sh
 RUN chmod 755 /usr/local/bin/*.sh
 
-EXPOSE 8080
+EXPOSE 6010 6011 6012
 
 ### CMD /usr/local/bin/startmain.sh
