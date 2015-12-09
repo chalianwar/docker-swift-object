@@ -8,8 +8,7 @@
 SWIFT_PART_POWER=${SWIFT_PART_POWER:-7}
 SWIFT_PART_HOURS=${SWIFT_PART_HOURS:-1}
 SWIFT_REPLICAS=${SWIFT_REPLICAS:-1}
-SWIFT_PWORKERS=${PROXY_WORKERS:-8}
-SWIFT_OWORKERS=${OBJECT_WORKERS:-8}
+SWIFT_OWORKERS=${SWIFT_OWORKERS:-8}
 
 if [ -e /srv/account.builder ]; then
 	echo "Ring files already exist in /srv, copying them to /etc/swift..."
@@ -21,31 +20,6 @@ fi
 # to get it owned by Swift.
 chown -R swift:swift /srv
 
-if [ ! -e /etc/swift/account.builder ]; then
-
-	cd /etc/swift
-
-	# 2^& = 128 we are assuming just one drive
-	# 1 replica only
-
-	echo "No existing ring files, creating them..."
-
-	swift-ring-builder object.builder create ${SWIFT_PART_POWER} ${SWIFT_REPLICAS} ${SWIFT_PART_HOURS}
-	swift-ring-builder object.builder add r1z1-127.0.0.1:6010/sdb1 1
-	swift-ring-builder object.builder rebalance
-	swift-ring-builder container.builder create ${SWIFT_PART_POWER} ${SWIFT_REPLICAS} ${SWIFT_PART_HOURS}
-	swift-ring-builder container.builder add r1z1-127.0.0.1:6011/sdb1 1
-	swift-ring-builder container.builder rebalance
-	swift-ring-builder account.builder create ${SWIFT_PART_POWER} ${SWIFT_REPLICAS} ${SWIFT_PART_HOURS}
-	swift-ring-builder account.builder add r1z1-127.0.0.1:6012/sdb1 1
-	swift-ring-builder account.builder rebalance
-
-	# Back these up for later use
-	echo "Copying ring files to /srv to save them if it's a docker volume..."
-	cp *.gz /srv
-	cp *.builder /srv
-
-fi
 
 # If you are going to put an ssl terminator in front of the proxy, then I believe
 # the storage_url_scheme should be set to https. So if this var isn't empty, set
@@ -66,8 +40,7 @@ if [ ! -z "${SWIFT_SET_PASSWORDS}" ]; then
 	grep "user_test" /etc/swift/proxy-server.conf
 fi
 
-# Set the number of proxy workers and object workers on fly
-sed -i "s/workers.*/workers = $SWIFT_PWORKERS/g" /etc/swift/proxy-server.conf
+# Set the number of object workers on fly
 sed -i "s/workers.*/workers = $SWIFT_OWORKERS/g" /etc/swift/object-server.conf
 
 # Start supervisord
