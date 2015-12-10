@@ -20,6 +20,7 @@ fi
 # to get it owned by Swift.
 chown -R swift:swift /srv
 
+cd /etc/swift
 
 # If you are going to put an ssl terminator in front of the proxy, then I believe
 # the storage_url_scheme should be set to https. So if this var isn't empty, set
