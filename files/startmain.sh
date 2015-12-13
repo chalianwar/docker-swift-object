@@ -9,6 +9,8 @@ SWIFT_PART_POWER=${SWIFT_PART_POWER:-7}
 SWIFT_PART_HOURS=${SWIFT_PART_HOURS:-1}
 SWIFT_REPLICAS=${SWIFT_REPLICAS:-1}
 SWIFT_OWORKERS=${SWIFT_OWORKERS:-8}
+SWIFT_DEVICE=${SWIFT_DEVICE:-sdb:sdd}
+
 
 if [ -e /srv/account.builder ]; then
 	echo "Ring files already exist in /srv, copying them to /etc/swift..."
@@ -21,6 +23,13 @@ fi
 chown -R swift:swift /srv
 
 cd /etc/swift
+
+for device  in $(echo $SWIFT_DEVICE | tr ":" "\n"); do
+	mkdir -p /srv/$device
+	mount /dev/$device /srv/$device -t ext4 -o noatime,nodiratime,nobarrier,user_xattr
+done
+
+chown -R swift:swift /srv
 
 # If you are going to put an ssl terminator in front of the proxy, then I believe
 # the storage_url_scheme should be set to https. So if this var isn't empty, set
