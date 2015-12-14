@@ -31,14 +31,7 @@ done
 
 chown -R swift:swift /srv
 
-
-cd /etc/swift
-tftp> ali@uet:~$ tftp uet.cs.vt.edu << fin
-get account.ring.gz
-get object.ring.gz
-get container.ring.gz
-quit
-fin
+sshpass -p "kevin" scp -r -o StrictHostKeyChecking=no  root@192.168.0.171:~/files/*.gz .
 
 chown -R root:swift /etc/swift
 
