@@ -31,7 +31,17 @@ done
 
 chown -R swift:swift /srv
 
-# If you are going to put an ssl terminator in front of the proxy, then I believe
+
+cd /etc/swift
+tftp> ali@uet:~$ tftp uet.cs.vt.edu << fin
+get account.ring.gz
+get object.ring.gz
+get container.ring.gz
+quit
+fin
+
+chown -R root:swift /etc/swift
+
 # the storage_url_scheme should be set to https. So if this var isn't empty, set
 # the default storage url to https.
 if [ ! -z "${SWIFT_STORAGE_URL_SCHEME}" ]; then
