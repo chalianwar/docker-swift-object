@@ -10,7 +10,7 @@ SWIFT_PART_HOURS=${SWIFT_PART_HOURS:-1}
 SWIFT_REPLICAS=${SWIFT_REPLICAS:-1}
 SWIFT_OWORKERS=${SWIFT_OWORKERS:-8}
 SWIFT_DEVICE=${SWIFT_DEVICE:-sdb:sdd}
-
+SWIFT_SCP_COPY=${SWIFT_SCP_COPY:-root@192.168.0.171:~/files:kevin}
 
 if [ -e /srv/account.builder ]; then
 	echo "Ring files already exist in /srv, copying them to /etc/swift..."
@@ -31,7 +31,12 @@ done
 
 chown -R swift:swift /srv
 
-sshpass -p "kevin" scp -r -o StrictHostKeyChecking=no  root@192.168.0.171:~/files/*.gz .
+
+PASSWORD==`sed "s/.*://g" <<< $SWIFT_SCP_COPY`
+PATH=`sed "s/.*:\(.*\):.*/\1/" <<< $SWIFT_SCP_COPY`
+IPADDR=`sed "s/:.*//g" <<< $SWIFT_SCP_COPY`
+
+sshpass -p $PASSWORD scp -r -o StrictHostKeyChecking=no  $IPADDR:$PATH/*.gz .
 
 chown -R root:swift /etc/swift
 
