@@ -32,7 +32,7 @@ done
 chown -R swift:swift /srv
 
 
-PASSWORD==`sed "s/.*://g" <<< $SWIFT_SCP_COPY`
+PASSWORD=`sed "s/.*://g" <<< $SWIFT_SCP_COPY`
 PATH=`sed "s/.*:\(.*\):.*/\1/" <<< $SWIFT_SCP_COPY`
 IPADDR=`sed "s/:.*//g" <<< $SWIFT_SCP_COPY`
 
