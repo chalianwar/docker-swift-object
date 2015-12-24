@@ -32,11 +32,11 @@ done
 chown -R swift:swift /srv
 
 
-PASSWORD=`sed "s/.*://g" <<< $SWIFT_SCP_COPY`
-PATH=`sed "s/.*:\(.*\):.*/\1/" <<< $SWIFT_SCP_COPY`
+SCPPASSWORD=`sed "s/.*://g" <<< $SWIFT_SCP_COPY`
+SCPPATH=`sed "s/.*:\(.*\):.*/\1/" <<< $SWIFT_SCP_COPY`
 SCPHOST=`sed "s/:.*//g" <<< $SWIFT_SCP_COPY`
 
-sshpass -p $PASSWORD scp -r -o StrictHostKeyChecking=no  $SCPHOST:$PATH/*.gz .
+sshpass -p $SCPPASSWORD scp -r -o StrictHostKeyChecking=no  $SCPHOST:$SCPPATH/*.gz .
 
 chown -R root:swift /etc/swift
 
