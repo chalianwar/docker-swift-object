@@ -36,7 +36,7 @@ PASSWORD=`sed "s/.*://g" <<< $SWIFT_SCP_COPY`
 PATH=`sed "s/.*:\(.*\):.*/\1/" <<< $SWIFT_SCP_COPY`
 SCPHOST=`sed "s/:.*//g" <<< $SWIFT_SCP_COPY`
 
-sshpass -p $PASSWORD scp -r -o StrictHostKeyChecking=no  $IPADDR:$PATH/*.gz .
+sshpass -p $PASSWORD scp -r -o StrictHostKeyChecking=no  $SCPHOST:$PATH/*.gz .
 
 chown -R root:swift /etc/swift
 
