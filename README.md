@@ -39,7 +39,7 @@ SWIFT_OWORKERS is used to set the object workers dynamically.
 The ring files created at the proxy server needs to be copied to the object servers as well. SWIFT_SCP_COPY
 contains the remote location path from where ring files can be copied. root@192.168.0.171:~/files is the remote path, whereas kevin is the `scp password`.
 
-At this point OpenStack Swift proxy is running.
+At this point OpenStack Swift object server is running.
 
 
 ```bash
