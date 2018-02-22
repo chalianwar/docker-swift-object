@@ -9,7 +9,6 @@ SWIFT_PART_POWER=${SWIFT_PART_POWER:-7}
 SWIFT_PART_HOURS=${SWIFT_PART_HOURS:-1}
 SWIFT_REPLICAS=${SWIFT_REPLICAS:-1}
 SWIFT_OWORKERS=${SWIFT_OWORKERS:-8}
-SWIFT_DEVICE=${SWIFT_DEVICE:-sdb:sdd}
 SWIFT_SCP_COPY=${SWIFT_SCP_COPY:-root@192.168.0.171:~/files:kevin}
 
 if [ -e /srv/account.builder ]; then
@@ -23,11 +22,6 @@ fi
 chown -R swift:swift /srv
 
 cd /etc/swift
-
-for device  in $(echo $SWIFT_DEVICE | tr ":" "\n"); do
-	mkdir -p /srv/$device
-	mount /dev/$device /srv/$device -t ext4 -o noatime,nodiratime,nobarrier,user_xattr
-done
 
 chown -R swift:swift /srv
 
